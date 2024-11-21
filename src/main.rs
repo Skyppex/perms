@@ -4,8 +4,15 @@ use std::io::{self, BufRead, Write};
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
 
+    if let Some(a) = args.get(1) {
+        if a == "-h" || a == "--help" {
+            eprintln!("Usage: {} [k]", args[0]);
+            std::process::exit(1);
+        }
+    }
+
     let stdin = io::stdin();
-    let lines: Vec<String> = stdin.lock().lines().filter_map(Result::ok).collect();
+    let lines: Vec<String> = stdin.lock().lines().map_while(Result::ok).collect();
 
     let k = args
         .get(1)
